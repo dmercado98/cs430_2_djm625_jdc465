@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "v3math.h"
 // form v3 from a to b
 void v3_from_points(float *dst, float *a, float *b){
