@@ -30,8 +30,7 @@ void v3_cross_product(float *dst, float *a, float *b){
     dst[1] = returnY;
     dst[2] = returnZ;
 }
-//I literally dont know what to do for this since theres no vector lol
-// I asked a friend for some help on this
+
 void v3_scale(float *dst, float s){
     dst[0] = dst[0] * s;
     dst[1] = dst[1] * s;
@@ -64,11 +63,11 @@ float v3_angle_quick(float *a, float *b){
 //Unsure if it works.
 void v3_reflect(float *dst, float *v, float *n){
     float dotProd = v3_dot_product(n,v);
-    float *nVect = (float *)malloc(sizeof(float)*3);
+    float nVect[3];
+    v3_normalize(nVect,n);
     dotProd = 2 * dotProd;
     v3_scale(nVect,dotProd);
     v3_subtract(dst, v, nVect);
-    free(nVect);
 }
 float v3_length(float *a){
     float returnVal;

@@ -47,13 +47,14 @@ int main(void) {
     test_angle_quick(testVectDest, testVectA, testVectB);
     
     printf("\ntest reflect:\n");
-    float *v, *u;
-    test_reflect(testVectDest, v, u);
+    test_reflect(testVectDest, testVectA, testVectB);
     
     printf("\ntest length\n");
     test_length(testVectA);
     
     printf("\ntest normalize\n");
+    test_normalize(testVectDest,testVectA);
+    return 0;
 }
 
 int v3_equals(float *a, float *b, float tolerance) {
@@ -975,7 +976,221 @@ void test_angle_quick(float *dst, float *a, float *b) {
 }
 
 void test_reflect(float *dst, float *v, float *n) {
-    printf("reeee\n");
+    float cv[3];
+    
+    // pos int test
+    v[0] = -2.0;
+    v[1] = 2.0;
+    v[2] = 0.0;
+    
+    n[0] = 0.0;
+    n[1] = 1.0;
+    n[2] = 0.0;
+    
+    cv[0] = -2.0;
+    cv[1] = -2.0;
+    cv[2] = 0;
+    
+    v3_reflect(dst, v, n);
+    
+    if(v3_equals(dst, cv, 0.0001)) {
+        printf("pos ints: passed\n");
+    }
+    else {
+        printf("pos ints: failed\n");
+        printf("\texpected: [%.6f, %.6f, %.6f]\n", cv[0], cv[1], cv[2]);
+        printf("\tactual: [%.6f, %.6f, %.6f]\n", dst[0], dst[1], dst[2]);
+    }
+    
+    // neg int test
+    v[0] = 0.0;
+    v[1] = -7.0;
+    v[2] = -2.0;
+    
+    n[0] = 7.0;
+    n[1] = 0.0;
+    n[2] = 2.0;
+    
+    cv[0] = 7.692192;
+    cv[1] = -7.0;
+    cv[2] = 0.197769;
+    
+    v3_reflect(dst, v, n);
+    
+    if(v3_equals(dst, cv, 0.0001)) {
+        printf("neg ints: passed\n");
+    }
+    else {
+        printf("neg ints: failed\n");
+        printf("\texpected: [%.6f, %.6f, %.6f]\n", cv[0], cv[1], cv[2]);
+        printf("\tactual: [%.6f, %.6f, %.6f]\n", dst[0], dst[1], dst[2]);
+    }
+    
+    // zero test
+    v[0] = 0.0;
+    v[1] = 0.0;
+    v[2] = 0.0;
+    
+    n[0] = 0.0;
+    n[1] = 0.0;
+    n[2] = 0.0;
+    
+    cv[0] = 0.0;
+    cv[1] = 0.0;
+    cv[2] = 0.0;
+    
+    v3_reflect(dst, v, n);
+    
+    if(v3_equals(dst, cv, 0.0001)) {
+        printf("zero: passed\n");
+    }
+    else {
+        printf("zero: failed\n");
+        printf("\texpected: [%.6f, %.6f, %.6f]\n", cv[0], cv[1], cv[2]);
+        printf("\tactual: [%.6f, %.6f, %.6f]\n", dst[0], dst[1], dst[2]);
+    }
+    
+    // pos float test
+    v[0] = 0.0;
+    v[1] = 7.12345;
+    v[2] = 2.0;
+    
+    n[0] = 7.12345;
+    n[1] = 0.0;
+    n[2] = 2.12345;
+    
+    cv[0] = -8.139845;
+    cv[1] = 7.123450;
+    cv[2] = -0.426430;
+    
+    v3_reflect(dst, v, n);
+    
+    if(v3_equals(dst, cv, 0.0001)) {
+        printf("pos float: passed\n");
+    }
+    else {
+        printf("pos float: failed\n");
+        printf("\texpected: [%.6f, %.6f, %.6f]\n", cv[0], cv[1], cv[2]);
+        printf("\tactual: [%.6f, %.6f, %.6f]\n", dst[0], dst[1], dst[2]);
+    }
+    
+    // neg float test
+    v[0] = 0.0;
+    v[1] = -7.12345;
+    v[2] = -2.0;
+    
+    n[0] = 7.12345;
+    n[1] = 0.0;
+    n[2] = 2.12345;
+    
+    cv[0] = 8.139845;
+    cv[1] = -7.123450;
+    cv[2] = 0.426430;
+    
+    v3_reflect(dst, v,n);
+    
+    if(v3_equals(dst, cv, 0.0001)) {
+        printf("neg float: passed\n");
+    }
+    else {
+        printf("neg float: failed\n");
+        printf("\texpected: [%.6f, %.6f, %.6f]\n", cv[0], cv[1], cv[2]);
+        printf("\tactual: [%.6f, %.6f, %.6f]\n", dst[0], dst[1], dst[2]);
+    }
+}
+
+void test_normalize(float *dst,float *a) {
+    float val;
+    float cv[3];
+    // all pos
+    a[0] = 1.3;
+    a[1] = 2.2;
+    a[2] = 3.1;
+    
+    cv[0] = 0.30103;
+    cv[1] = 0.55190;
+    cv[2] = 0.77767;
+    v3_normalize(dst,a);
+    if(v3_equals(dst, cv, .0001)) {
+        printf("all pos: passed\n");
+    }
+    else {
+        printf("all pos: failed\n");
+        printf("\texpected: %.6f\n", dst);
+        printf("\tactual: %.6f\n", val);
+    }
+    
+    // 1 neg
+    a[0] = 1.3;
+    a[1] = -2.2;
+    a[2] = 3.1;
+    
+    cv[0] = 0.32358;
+    cv[1] = -0.54760;
+    cv[2] = 0.77163;
+    v3_normalize(dst,a);
+    if(v3_equals(dst, cv, .0001)) {
+        printf("1 neg: passed\n");
+    }
+    else {
+        printf("1 neg: failed\n");
+        printf("\texpected: %.6f\n", dst);
+        printf("\tactual: %.6f\n", val);
+    }
+    
+    // 2 neg
+    a[0] = 1.3;
+    a[1] = -2.2;
+    a[2] = -3.1;
+    
+    cv[0] = 0.32358;
+    cv[1] = -0.54760;
+    cv[2] = -0.77163;
+    v3_normalize(dst,a);
+    if(v3_equals(dst, cv, .0001)) {
+        printf("2 neg: passed\n");
+    }
+    else {
+        printf("2 neg: failed\n");
+        printf("\texpected: %.6f\n", dst);
+        printf("\tactual: %.6f\n", val);
+    }
+    
+    // all neg
+    a[0] = -1.3;
+    a[1] = -2.2;
+    a[2] = -3.1;
+    
+    cv[0] = -0.32358;
+    cv[1] = -0.54760;
+    cv[2] = -0.77163;
+    v3_normalize(dst,a);
+    if(v3_equals(dst, cv, .0001)) {
+        printf("all neg: passed\n");
+    }
+    else {
+        printf("all neg: failed\n");
+        printf("\texpected: %.6f\n", dst);
+        printf("\tactual: %.6f\n", val);
+    }
+    
+    // zero
+    a[0] = 0.0;
+    a[1] = 0.0;
+    a[2] = 0.0;
+    
+    cv[0] = 0.0;
+    cv[1] = 0.0;
+    cv[2] = 0.0;
+    v3_normalize(dst,a);
+    if(v3_equals(dst, cv, .0001)) {
+        printf("all zero: passed\n");
+    }
+    else {
+        printf("all zero: failed\n");
+        printf("\texpected: %.6f\n", dst);
+        printf("\tactual: %.6f\n", val);
+    }
 }
 
 void test_length(float *a) {
